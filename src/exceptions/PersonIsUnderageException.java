@@ -4,6 +4,6 @@ package exceptions;
 public class PersonIsUnderageException extends Exception{
 
 	public PersonIsUnderageException() {
-		super();
+		super("Esta persona es menor de edad y no puede entrar");
 	}
 }

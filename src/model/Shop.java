@@ -1,10 +1,9 @@
 package model;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import exceptions.NotAssignedDayException;
-import exceptions.PersonIsUnderageException;
+import exceptions.*;
 
 public class Shop {
 
@@ -19,8 +18,8 @@ public class Shop {
 	
 	//methods
 	
-	public Shop(int pc) {
-		personCounter=pc;
+	public Shop() {
+		personCounter=0;
 		name="Mi Barrio Te Quiere";
 		clients= new ArrayList<Person>();
 	}
@@ -41,15 +40,42 @@ public class Shop {
 		name = n;
 	}
 	
-	public void registerPerson(String idt,String idn) throws NotAssignedDayException,PersonIsUnderageException {
+	public List<Person> getClients() {
+		return clients;
+	}
+
+	public void setClients(List<Person> clients) {
+		this.clients = clients;
+	}
+	
+	public void registerPerson(String idt,String idn, int date) throws NotAssignedDayException,PersonIsUnderageException {
+		
+		setPersonCounter(getPersonCounter()+1);
 		if(idt.equals(Person.TI))
 		{
 			throw new PersonIsUnderageException();
 		}
 		else {
-			if( LocalDate.now().getDayOfMonth()%2!=0)
+			if( date%2!=0)
 			{
-				
+				if(idn.charAt(idn.length()-2)%2==0)
+				{
+					Person toRegister= new Person (idt,idn);
+					clients.add(toRegister);
+				}
+				else {
+					throw new NotAssignedDayException("El penúltimo número del documento de esta persona es impar y debe salir en dias pares");
+				}
+			}
+			else {
+				if(idn.charAt(idn.length()-2)%2!=0)
+				{
+					Person toRegister= new Person (idt,idn);
+					clients.add(toRegister);
+				}
+				else {
+					throw new NotAssignedDayException("El penúltimo número del documento de esta persona es par y debe salir en dias impares");
+				}
 			}
 		}
 	}
